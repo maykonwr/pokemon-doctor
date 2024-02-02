@@ -1,41 +1,24 @@
-import React from "react";
-import { Header } from "./../../components/Header";
-import { Footer } from "./../../components/Footer";
-import { ContainerQuemSomos, ContentHeaderQuemSomos, GlobalStyle, GoToHome, TextQuemSomos, TitleQuemSomos } from "../Styled";
+import React from "react"
+import { Form } from "../../components/Form"
+import { IScheduleProps } from "../../types/pages"
+import DefaultPage from "../default"
+import { BottomHeader } from "../../components/bottomHeader"
+import { Main } from "./style"
+import { getServerSideProps } from "./../api/pokemon"
 
-import { useForm, SubmitHandler } from "react-hook-form"
-
-type Inputs = {
-  example: string
-  exampleRequired: string
-}
-const Consulta = () => {
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-      } = useForm<Inputs>()
-      const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
-    
-      console.log(watch("example")) // watch input value by passing the name of it
-
+const Consulta = ({ regions, dates }: IScheduleProps) => {
     return (
         <>
-            <GlobalStyle />
-            <Header />
-            <ContainerQuemSomos>
-                <ContentHeaderQuemSomos>
-                    <GoToHome>{`Home > Agendar Consulta`}</GoToHome>
-                    <TitleQuemSomos>Agendar Consulta</TitleQuemSomos>
-                    <TextQuemSomos>Recupere seus pokémons em 5 segundos</TextQuemSomos>
-                </ContentHeaderQuemSomos>
-            </ContainerQuemSomos>
-
-            <Footer />
+            <DefaultPage>
+                <BottomHeader section='Agendar consulta' description='Recupere seus pokémons em 5 segundos' />
+                <Main>
+                    <Form regions={regions} dates={dates} />
+                </Main>
+            </DefaultPage>
         </>
     )
 }
+
+export { getServerSideProps }
 
 export default Consulta

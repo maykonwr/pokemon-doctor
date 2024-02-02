@@ -1,3 +1,13 @@
-import Footer from './Footer'
+import { FooterStyle } from './style'
 
-export { Footer }
+export const Footer = () => {
+
+    return (
+        <>
+            <FooterStyle>
+                <p>Todas as marcas e ilustrações utilizadas são de seus respectivos donos.</p>
+            </FooterStyle>
+        </>
+    )
+
+}

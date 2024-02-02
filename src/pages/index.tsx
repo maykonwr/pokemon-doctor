@@ -1,15 +1,17 @@
-import { Header } from "../components/Header"
-import { BannerStatic } from '../components/BannerStatic'
-import { Footer } from "../components/Footer"
-import {GlobalStyle} from './Styled';
+import DefaultPage from './default'
+import { Main } from './style'
+import BannerStatic from '../components/BannerStatic'
 
-export default function Home() {
-  return (
-    <>
-      <GlobalStyle />
-        <Header />
-        <BannerStatic />
-        <Footer />
-    </>
-  )
+const Home = () => {
+    return (
+        <>
+            <DefaultPage isHome={true}>
+                <Main>
+                    <BannerStatic />
+                </Main>
+            </DefaultPage>
+        </>
+    )
 }
+
+export default Home
