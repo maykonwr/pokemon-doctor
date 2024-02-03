@@ -9,8 +9,8 @@ import { Input } from '../Input'
 export const Form = ({regions, dates}: IForm) => {
 
     const [isPokemonAdded, setIsPokemonAdded] = useState(false)
-    const [isDateSelected, setIsDateSelected] = useState(false);
-    const [isTimeSelected, setIsTimeSelected] = useState(false);
+    const [isDateSelected, setIsDateSelected] = useState(false)
+    const [isTimeSelected, setIsTimeSelected] = useState(false)
     const { 
         createSelectPokemon,
         getGenerationRegion,
@@ -101,8 +101,8 @@ export const Form = ({regions, dates}: IForm) => {
                     <Select 
                         {...register('schedule.date')} 
                         callBack={(selectedDate) => {
-                            getHours(selectedDate);
-                            setIsDateSelected(!!selectedDate);
+                            getHours(selectedDate)
+                            setIsDateSelected(!!selectedDate)
                         }} 
                         valueLabel='Data para atendimento' 
                         idSelect='dateSchedule' 
