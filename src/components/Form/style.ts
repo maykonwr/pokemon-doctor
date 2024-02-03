@@ -234,7 +234,7 @@ export const ContainerForm = styled.div`
                 > button {
                     padding: 0 15px;
                 }
-
+                
                 > button:hover {
                     padding: 0 15px;
                     border: 2px solid var(--primary-color);

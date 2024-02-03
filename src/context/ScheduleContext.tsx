@@ -1,23 +1,28 @@
-import { createContext, useEffect, useState } from 'react'
-import { UseFormHandleSubmit, UseFormRegister, useForm } from 'react-hook-form'
-import { IInfoSchedule, ICity, IPokemon, THour, IAreaCity } from '../types/components'
-import { IRegion } from '../types/pages'
+import { IAreaCity, ICity, IInfoSchedule, IPokemon, TTime } from '../types/components'
+import { FieldErrors, UseFormHandleSubmit, UseFormRegister, useForm } from 'react-hook-form'
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { IRegion } from '../types/pages'
+import { Select } from '../components/Select'
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 import * as yup from 'yup'
 import axios from 'axios'
-import { Select } from '../components/Select'
-import { toast } from 'react-toastify'
 
 const schema = yup.object().shape({
-    name: yup.string().required(),
-    surname: yup.string().required(),
-    region: yup.string().required(),
-    city: yup.string().required(),
-    pokemons: yup.array().of(
-      yup.string().optional()
-    ).required().min(1),
-    date: yup.string().required(),
-    hour: yup.string().required(),
+    name: yup.string().required('Nome é obrigatório'),
+    surname: yup.string().required('Sobrenome é obrigatório'),
+    region: yup.string().required('Região é obrigatória'),
+    city: yup.string().required('Cidade é obrigatória'),
+    pokemons: yup.array()
+        .of(yup.string().optional())
+        .min(1, 'Adicione pelo menos 1 pokémon')
+        .required('Adicione pelo menos 1 pokémon'),
+    schedule: yup.object().shape({
+        date: yup.string().required('Data é obrigatória'),
+        time: yup.string().required('Horário é obrigatório')
+    }).required(),
 })
 
 export interface IDefaultProviderProps {
@@ -25,46 +30,80 @@ export interface IDefaultProviderProps {
 }
 
 export interface IScheduleContext {
+    setDescriptionError: Dispatch<SetStateAction<string | undefined>>,
+    setIsError: Dispatch<SetStateAction<boolean | undefined>>,
     getGenerationRegion: (regions: IRegion[]) => void,
     handleSubmit: UseFormHandleSubmit<IInfoSchedule>,
     onSubmit: (payload: IInfoSchedule) => void,
     register: UseFormRegister<IInfoSchedule>,
     getAllPokemons: (city: string) => void,
+    descriptionSuccess: string | undefined,
+    descriptionError: string | undefined,
     getCities: (region: string) => void,
+    errors: FieldErrors<IInfoSchedule> ,
     getHours: (date: string) => void,
     createSelectPokemon: () => void,
     selectsPokemons: JSX.Element[],
+    isError: boolean | undefined,
     rateValue: number,
     cities: ICity[],
-    hours: string[],
-    selectedDate: string,
-    selectedHour: string,
-    setSelectedDate: React.Dispatch<React.SetStateAction<string>>,
-    setSelectedHour: React.Dispatch<React.SetStateAction<string>>,
-    appointmentDetails: { pokemonCount: number, date: string, hour: string },
-    saveAppointmentDetails: (details: { pokemonCount: number, date: string, hour: string }) => void,
+    time: string[],
 }
 
 export const ScheduleContext = createContext({} as IScheduleContext)
 
-export const ScheduleProvider = ({ children }: IDefaultProviderProps) => {
-    const [selectedDate, setSelectedDate] = useState('')
-    const [selectedHour, setSelectedHour] = useState('')
+export const ScheduleProvider = ({children}: IDefaultProviderProps) => {
 
-    const { register, handleSubmit, formState: { errors }, watch } = useForm({
+    const { register, handleSubmit, formState: { errors }, watch, reset } = useForm({
         resolver: yupResolver(schema),
     })
-    
-    const onSubmit = (payload: IInfoSchedule) => {
-        console.log(payload)
-    }
 
     const [myPokemonsRegionGeneration, setMyPokemonsRegionGeneration] = useState<{region: string, generation: number}[]>([])
     const [selectsPokemons, setSelectsPokemons] = useState<JSX.Element[]>([])
     const [allPokemons, setAllPokemons] = useState<IPokemon[]>([])
     const [rateValue, setRateValue] = useState<number>(0)
     const [cities, setCities] = useState<ICity[]>([])
-    const [hours, setHours] = useState<THour>([])
+    const [time, setTime] = useState<TTime>([])
+    const [isError, setIsError] = useState<boolean | undefined>(undefined)
+    const [descriptionSuccess, setDescriptionSuccess] = useState<string | undefined>()
+    const [descriptionError, setDescriptionError] = useState<string | undefined>()
+    const [isSubmitSuccessful, setIsSubmitSuccessful] = useState<boolean>()
+    
+    const onSubmit = (payload: IInfoSchedule) => {
+        if(payload.pokemons && !payload.pokemons.some((element: string | undefined) => element === '')){
+            const allScheduleDataCookies = Cookies.get('schedules') ? 
+                JSON.parse(Cookies.get('schedules')!) : []
+    
+            const freeTime = allScheduleDataCookies.filter((scheduleObj: IInfoSchedule) => 
+                payload.schedule.date === scheduleObj.schedule.date && 
+                    payload.schedule.time === scheduleObj.schedule.time  
+            )
+
+            if (freeTime.length === 0) {
+                allScheduleDataCookies.length > 0 ?
+                    Cookies.set('schedules', JSON.stringify([...allScheduleDataCookies, payload])) :
+                    Cookies.set('schedules', JSON.stringify([payload]))
+            
+                const numberOfPokemons = payload.pokemons?.length || 0
+                const scheduleDate = payload.schedule.date
+                const scheduleTime = payload.schedule.time
+            
+                setDescriptionSuccess(`Seu agendamento para dia ${scheduleDate}, às ${scheduleTime}, para ${numberOfPokemons} pokémon${numberOfPokemons === 1 ? '' : 's'} foi realizado com sucesso!`)
+                setIsError(false)
+                setIsSubmitSuccessful(true)
+            } else {
+                const scheduleDate = payload.schedule.date
+                const scheduleTime = payload.schedule.time
+
+                setIsError(true)
+                setIsSubmitSuccessful(false)
+                setDescriptionError(`O horário (${scheduleTime}) não está disponível para o dia (${scheduleDate})`)
+            }
+
+        } else {
+            toast.error('Adicione pelo menos 1 pokémon')
+        }
+    }
     
     const createSelectPokemon = () => {
         if(cities.length > 0){
@@ -87,24 +126,22 @@ export const ScheduleProvider = ({ children }: IDefaultProviderProps) => {
             toast.error('Selecione primeiro uma cidade')
         }
     }
-
+    
     const getCities = async (region: string) => {
-        if(!region){
-            setCities([])
-        }
+        !region && setCities([])
+
         if(region){
             setCities([])
             try {
                 const {data} = await axios.get(`https://pokeapi.co/api/v2/region/${region}/`)
                 setCities(data.locations)
             } catch (error) {
-                console.error('Erro ao buscar as cidades', error)
+                console.error('Error when trying to search for cities', error)
             }
         }
     }
     
     const getAllPokemons = async (city: string) => {
-        console.log(allPokemons)   
         if(city){
             try {
                 const {data} = await axios.get(`https://pokeapi.co/api/v2/location/${city}/`)
@@ -118,86 +155,83 @@ export const ScheduleProvider = ({ children }: IDefaultProviderProps) => {
                 }))
                 setAllPokemons([...pokemonsArray])
             } catch (error) {
-                console.error('Erro ao buscar as cidades', error)
-            }
-        }
-    }
-
-    const getHours = async (date: string) => {
-        if (!date) {
-            setHours([])
-            setSelectedDate('')
-            setSelectedHour('')
-        } else {
-            try {
-                const { data } = await axios.post('http://localhost:3000/api/scheduling/time', { date: date })
-                setHours(data)
-                setSelectedDate(date)
-                setSelectedHour('')
-            } catch (error) {
-                console.log(error)
+                console.error('Error when trying to search for Pokémon', error)
             }
         }
     }
     
+    const getHours = async (date: string) => { 
+        !date && setTime([])
 
-    const getGenerationRegion = (regions: IRegion[]) => {
+        if(date){
+            try {
+                const {data} = await axios.post('http://localhost:3000/api/scheduling/time', {date: 0})
+                setTime(data)
+            } catch (error) {
+                console.error('Error when trying to find the time', error)
+            }
+        }
+    }
+    
+    const getGenerationRegion = (regions: IRegion[]) => {  
         const region = watch('region')
         const index = regions.findIndex((element) => element.name === region)
-
         const pokemonObj = {
             region: region,
             generation: index + 1,
         }
-
+        
         allPokemons && setMyPokemonsRegionGeneration([...myPokemonsRegionGeneration, pokemonObj])
     }
-
+    
     const getGenerationAndRate = () => {
         if(allPokemons.length > 0){
             const rate = 0.03 * (selectsPokemons.length * 70)
             setRateValue(myPokemonsRegionGeneration.reduce((a, b) => Math.max(a, b.generation), 0) * rate)
         }
     }
-
+    
     useEffect(() => {
         getGenerationAndRate()
     }, [selectsPokemons, allPokemons])
 
-    const [appointmentDetails, setAppointmentDetails] = useState<{ pokemonCount: number, date: string, hour: string }>({
-        pokemonCount: 0,
-        date: '',
-        hour: '',
-    })
-
-    const saveAppointmentDetails = (details: { pokemonCount: number, date: string, hour: string }) => {
-        setAppointmentDetails(details)
-    }
-
     useEffect(() => {
-        getGenerationAndRate()
-    }, [selectsPokemons, allPokemons])
+        if(isSubmitSuccessful) {
+            reset({
+                name: '',
+                surname: '',
+                region: '',
+                city: '',
+                schedule: {
+                    date: '',
+                    time: ''
+                }
+            })
+            setSelectsPokemons([])
+        }
+
+    }, [isSubmitSuccessful])
 
     return (
         <ScheduleContext.Provider value={{
             createSelectPokemon,
             getGenerationRegion,
+            setDescriptionError,
+            descriptionSuccess,
+            isError,
+            descriptionError,
             selectsPokemons,
             getAllPokemons,
             handleSubmit,
+            setIsError,
             rateValue,
             getCities,
             onSubmit,
             register,
             getHours,
+            errors,
             cities,
-            hours,
-            appointmentDetails,
-            saveAppointmentDetails,
-            setSelectedDate,
-            setSelectedHour,
-            selectedDate,
-            selectedHour,
+            time,
         }}>
             {children}
         </ScheduleContext.Provider>
