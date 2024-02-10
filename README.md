@@ -76,7 +76,7 @@ pnpm run dev
 
 Do you have any opinion and want to contribute to improving this project? Create a pull request and request a merge with all the necessary information
 
-1. `git clone https://github.com/maykonwr/app-delivery.git`
+1. `git clone https://github.com/maykonwr/pokemon-doctor.git`
 2. `git checkout -b feature/NAME`
 3. Follow commit patterns
 4. Open a Pull Request explaining the problem solved or feature made, if exists, append screenshot of visual modifications and wait for the review!
