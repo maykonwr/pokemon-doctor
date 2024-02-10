@@ -1,94 +1,88 @@
-# CODIE
+<h1 align="center" style="font-weight: bold;">Pokemon Doctor 💻</h1>
 
-<details>
-  <summary>
-    <strong>🤷🏽‍♀️ Como entregar</strong>
-  </summary><br>
+<p align="center">
+ <a href="#tech">Technologies</a> • 
+ <a href="#started">Getting Started</a> • 
+  <a href="#author">Author</a> •
+ <a href="#contribute">Contribute</a>
+</p>
 
-- **Envie o repositório do projeto concluído para este linkedin:** [Fernando-Codie](https://www.linkedin.com/in/fernando-maziero/)
+<p align="center">
+    <b>This is a project to improve knowledge in react and API consumption.</b>
+</p>
 
-</details>
+<p align="center">
+     <a href="https://" target="_blank">📱 Visit this Project</a>
+</p>
 
-# Orientações
+<h2 id="layout">🎨 Layout</h2>
 
-<details>
-  <summary>
-    <strong>🛠 Ferramentas</strong>
-  </summary><br>
-  
- - [TypeScript](https://www.typescriptlang.org/)
- - [Yup](https://www.npmjs.com/package/yup?activeTab=readme)
- - [PNPM](https://pnpm.io/installation)
- - [ReactJS](https://react.dev/)
- - [Axios](https://axios-http.com/docs/intro)
- - [NextJS](https://nextjs.org/)
- - [Swiper](https://swiperjs.com/demos)
- - [Dotenv](https://www.npmjs.com/package/dotenv)
- - [Toastify](https://www.npmjs.com/package/react-toastify)
- - [React-Hook-Form](https://react-hook-form.com/)
- - [Styled-Components](https://styled-components.com/)
+<p align="center">
+    <img src="https://cdn.discordapp.com/attachments/1134935950313656330/1205890801192669264/Home.png?ex=65da0453&is=65c78f53&hm=07ae4c7c746de32b45d8c62b553963bcdd6eb65fbbc87d130058db6e7fda475a&" alt="Image Login Screen" height="auto">
+    
+</p>
 
-</details>
- 
-Teste técnico para desenvolvimento frontend – React/NextJS.
+<h2 id="tech">💻 Technologies</h2>
 
-## Setup
+- React
+- TypeScript 
+- next.js
 
-Instale as dependências do código com pnpm
+<h2 id="started">🚀 Getting started</h2>
 
-## Inicie o projeto
-```shell
-pnpm run dev
+For help getting started with React, view our online [documentation](https://react.dev/).
 
+<h3>Prerequisites</h3>
+
+Here you list all prerequisites necessary for running your project. For example:
+- [VsCode](https://code.visualstudio.com/)
+- [React](https://react.dev/learn)
+- [NodeJS](https://nodejs.org/en)
+- [PNPM](https://pnpm.io/pt/installation)
+
+<h3>Cloning</h3>
+
+How to clone your project
+
+```bash
+git clone https://github.com/maykonwr/pokemon-doctor.git
 ```
 
-## Objetivo
+<h3>Starting</h3>
 
-Desenvolver um web app em Typescript, a partir deste projeto nextjs (clone o repositório e desenvolva em cima dele), que implemente o design descrito na próxima seção.
+How to start your project
 
-### Requisitos
-- Tratar possíveis erros de API
-- Demonstrar conhecimento do uso de hooks
-- Criar um código desacoplado, organizado e testável
-- Demonstrar conhecimento de modularização de componentes
-- Utilizar CSS in js – styled components para estilizar as páginas
-- Demonstrar conhecimento de TypeScript e suas features para organizar o projeto
-- Obrigatório o uso do react-hook-form + yup para o desenvolvimento do formulário
-- Deve ser usado Page Router do next.js e não a nova versão >=14.0.0 no desenvolvimento deste projeto.
-- Demonstrar organização, desacoplamento e separação de responsabilidades no código; obrigatório o uso de inversify + clean architecture
+```bash
+cd pokemon-doctor
+pnpm run dev
+```
 
-### Diferencial
-- Demonstrar conhecimentos de técnicas específicas de NextJS para lidar com estilos e server-side rendering.
-- Demonstrar em pelo menos 1 chamada de api o uso de SSR Next.js
-- Demonstrar conhecimento com react-query.
-- Demonstrar conhecimento em classes javascript POO.
+<h2 id="author">👨🏻‍💻 Author</h2>
 
-### Uso de APIs
-- Usar `http://localhost:3000/api/scheduling/date` para puxar as datas disponíveis para agendamento
-- Usar `htttp://localhost:3000/api/scheduling/time` para puxar os horários disponíveis para agendamento
-- Usar a [pokéAPI](https://pokeapi.co/) para trazer os dados de região, cidades, e pokémons a serem usados no agendamento
+<table>
+  <tr>
+    <td align="center">
+      <a href="#">
+        <img src="https://avatars.githubusercontent.com/maykonwr" width="100px;" alt="Maykon Profile Picture"/><br>
+        <sub>
+          <b>Maykon</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
-Entender o contrato das APIs é também parte do teste.
+<h2 id="contribute">📫 Contribute</h2>
 
-### Entrega
-O prazo para entrega é de **07 dias**.
+Do you have any opinion and want to contribute to improving this project? Create a pull request and request a merge with all the necessary information
 
-## Design a Ser Implementado
-O site deve implementar o design descrito nas telas abaixo. Todas as imagens necessárias estão na pasta `./public/images`.
+1. `git clone https://github.com/maykonwr/app-delivery.git`
+2. `git checkout -b feature/NAME`
+3. Follow commit patterns
+4. Open a Pull Request explaining the problem solved or feature made, if exists, append screenshot of visual modifications and wait for the review!
 
-A fonte utilizada em todas as páginas, e inclusive no logo, é chamada `Inter` e está disponível no Google Fonts.
+<h3>Documentations that might help</h3>
 
-Este figma pode ser utilizado para consulta: https://www.figma.com/file/TxK6YkULMRyMCf6158VYNx/CODIE-TESTE-FRONT-END?type=design&node-id=0-1&mode=design&t=0dzPE2mRNqKfLXIg-0
+[📝 How to create a Pull Request](https://www.atlassian.com/br/git/tutorials/making-a-pull-request)
 
-### Home
-![home page](public/test-sample/Home.png)
-Obs: O logo deve seguir o seguinte comportamento, iniciando expandido na home, e reduzindo após 05 segundos, da direita para a esquerda. Ele deve estar na forma reduzida nas demais páginas, abrindo no hover do mouse:
-![](public/test-sample/logo-behavior.png)
-### Quem Somos
-![](public/test-sample/Quem%20Somos.png)
-### Agendar Consulta
-![](public/test-sample/Agendar%20Consulta.png)
-#### Caso de Sucesso
-![](public/test-sample/Agendar%20Consulta%20Sucesso.png)
-#### Caso de Falha
-![](public/test-sample/Agendar%20Consulta%20Falha.png)
+[💾 Commit pattern](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
